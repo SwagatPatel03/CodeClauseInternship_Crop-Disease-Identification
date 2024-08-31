@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Disease Identifier</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #6dd5ed, #2193b0);
+            color: white;
+        }
+        .navbar {
+            background-color: #444;
+            border-bottom: 2px solid #2193b0;
+        }
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        h1 {
+            margin-bottom: 30px;
+            color: #ffcc00;
+        }
+        .btn-primary {
+            background-color: #ffcc00;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #e6b800;
+        }
+        #imagePreview img {
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+        }
+        #loadingSpinner {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Crop Disease Identifier</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Upload</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center">Upload Crop Image</h1>
+
+        <form id="uploadForm" action="/" method="post" enctype="multipart/form-data" class="text-center">
+            <input type="file" name="file" id="fileInput" class="form-control-file mb-3" accept="image/*" onchange="previewImage()" />
+            <div id="imagePreview" class="mb-3">
+                <!-- Image preview will be shown here -->
+            </div>
+            <button type="submit" class="btn btn-primary" id="predictButton" disabled>Predict</button>
+            <div id="loadingSpinner" class="spinner-border text-primary" role="status" style="display:none;">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function previewImage() {
+            var fileInput = document.getElementById('fileInput');
+            var imagePreview = document.getElementById('imagePreview');
+            var predictButton = document.getElementById('predictButton');
+
+            if (fileInput.files && fileInput.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    imagePreview.innerHTML = '<img src="' + e.target.result + '" alt="Uploaded Image" class="img-thumbnail" width="300">';
+                };
+
+                reader.readAsDataURL(fileInput.files[0]);
+                predictButton.disabled = false; // Enable the predict button after image preview
+            } else {
+                imagePreview.innerHTML = '';
+                predictButton.disabled = true; // Disable the predict button if no image is selected
+            }
+        }
+
+        document.getElementById('uploadForm').onsubmit = function() {
+            document.getElementById('loadingSpinner').style.display = 'inline-block';
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
